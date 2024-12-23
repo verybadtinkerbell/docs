@@ -76,30 +76,34 @@ The API request is designed to create a bot by providing necessary details such 
   </Step>
   <Step title="Example Request">
     ### Request Details
-- **URL**: `https://chat-app.fanheat.com/v2/bot`
-- **Headers**:
+    <Note>**URL**: `https://chat-app.fanheat.com/v2/bot`</Note>
+
+ **Headers**:
   ```json
   {
       "Authorization": "Bearer YOUR_API_KEY",
       "Content-Type": "application/json"
   }
   ```
-- **Body**:
+**Body**:
   ```json
-  {
-      "name": "TestBot",
-      "freeform": "A friendly bot for testing purposes",
-      "kv_pairs": {
-          "language": "English",
-          "timezone": "UTC"
-      }
-  }
+{
+    "name": "BotName",
+    "freeform": "This bot is designed to assist with API documentation and technical writing.",
+    "kv_pairs": {
+        "friendly": "true",
+        "tone": "professional",
+        "expertise": "API documentation, technical writing, and SEO",
+        "collaborative": "true",
+        "problem_solving": "excellent"
+    }
+}
   ```
 
-### Response Example
+**Response**
 ```json
 {
-    "bot_id": "f5570f1e-bc06-4b87-bc1c-954deab618cf"
+    "bot_id": "8d25c5be-6bb9-4112-ab13-71263780f17b"
 }
 ```
 
