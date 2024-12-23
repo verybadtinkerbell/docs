@@ -1,0 +1,144 @@
+---
+title: 'User Images'
+description: 'This tutorial will guide you through the process of uploading an image and associating it with your message using the Clonetwin.ai API. Follow the two steps outlined below to successfully send images and interact with the server.
+'
+icon: 'users'
+---
+
+
+## **Prerequisites**
+1. Access to the API endpoint and a valid token for authorization.
+2. A command-line interface (CLI) or an API testing tool like Postman.
+3. A valid image file (e.g., `photo.jpg`) to upload.
+
+---
+
+<Note>The Talend API Tester Chrome extension provides an easy way to test APIs directly from your browser.</Note>
+
+<Steps>
+  <Step title="Upload Image">
+    ![User Send Image](/images/talend-api.png)
+
+The first step is to upload your image to the server. Once the image is uploaded, the server will return an ID that you will use in subsequent requests.
+
+### **Steps to Upload an Image**
+1. Use the `API` or `curl` command or your preferred HTTP client to upload the image.
+2. Provide the `Authorization` token in the header.
+3. Attach your image file to the request body.
+
+### **Example Request**
+<Tabs>
+<Tab title="API ">
+ How to upload an image using the **Talend API Tester**
+
+1. **Open Talend API Tester**:
+   - Launch the Talend API Tester Chrome extension from your browser.
+
+2. **Set the HTTP Method**:
+   - In the top-left dropdown, select `POST` as the HTTP method.
+
+3. **Enter the Endpoint URL**:
+   - Paste the URL of the API endpoint into the input field:  
+     `https://chat-app.fanheat.com/v2/user_content`.
+
+4. **Add Headers**:
+   - Go to the **Headers** section:
+     - Add a header for **Authorization**:
+       - **Key**: `Authorization`
+       - **Value**: `Bearer <YOURTOKEN>` (Replace `<YOURTOKEN>` with your actual token).
+     - Add a header for **Content-Type**:
+       - **Key**: `Content-Type`
+       - **Value**: `image/jpeg`.
+
+5. **Upload the File**:
+   - Navigate to the **Body** section:
+     - Select **File** from the dropdown that allows choosing between **Text, File, or Form**.
+     - Drag and drop your file (e.g., `photo.jpg`) into the designated area or use the file picker.
+
+6. **Send the Request**:
+   - Click the blue **Send** button at the top-right corner to execute the request.
+  </Tab>
+  <Tab title="`curl` command">
+    How to upload an image using the `curl` command:
+```bash
+curl -X POST http://chat-app.fanheat.com/v2/user_content \
+    -H "Authorization: Bearer <YOURTOKEN>" \
+    --data-binary @photo.jpg
+```
+  </Tab>
+ 
+</Tabs>
+
+### **Example Response**
+The server will return a response with the image ID:
+```json
+{
+    "id": "879b09df-3117-47e1-9afa-008514368578"
+}
+
+```
+
+<Note>Save the `id` value (`879b09df-3117-47e1-9afa-008514368578` in this example), as you will need it in the next step.</Note>
+
+  
+  </Step>
+  
+  <Step title="Use the Image ID in a Message">
+    Once you have the `image_id`, you can include it in your message by using the `/complete` endpoint.
+
+### **Parameters**
+- `conversation_id`: The ID of the conversation where the image is sent.
+- `bot_id`: The ID of the bot you are interacting with.
+- `messages`: The conversation history in JSON format.
+- `message`: A caption accompanying the image (can also be an empty string).
+- `image_id`: The ID of the image returned from Step 1.
+- `min_delay`: Minimum delay for the bot response (in seconds).
+- `max_delay`: Maximum delay for the bot response (in seconds).
+
+### **Example Request**
+Here’s how to include the image in a message:
+```http
+POST http://chat-app.fanheat.com/v2/complete
+Content-Type: application/json
+Authorization: Bearer <YOURTOKEN>
+
+{
+  "conversation_id": "789",
+  "bot_id": "c5e84988-0192-4135-ac3b-4348bed724cb",
+  "messages": [
+    { "bot": true, "content": "[hey sexy, what are you up to tonight.. ]" },
+    { "bot": false, "content": "[not much, what about you]" },
+    { "bot": true, "content": "[not much either, just chilling at home. What do you look like??]" }
+  ],
+  "message": "this is me",
+  "image_id": "73b04d18-96fe-481e-b9e3-2257dba3a2cd",
+  "min_delay": 5,
+  "max_delay": 600
+}
+```
+
+### **Explanation**
+- `conversation_id`: Specifies which conversation the message belongs to.
+- `bot_id`: Identifies the bot interacting in the conversation.
+- `messages`: Contains previous messages exchanged in the chat.
+- `message`: Adds a caption or comment to the image (optional).
+- `image_id`: The ID of the image you uploaded in Step 1.
+- `min_delay` and `max_delay`: Define the range of delay before the bot responds.
+
+### **Example Response**
+Upon success, you’ll receive a response confirming the bot’s reply and further interaction in the conversation:
+```json
+{
+  "status": "success",
+  "response": {
+    "bot_reply": "Nice photo! What else are you up to tonight?",
+    ...
+  }
+}
+```
+  </Step>
+  
+</Steps>
+
+
+

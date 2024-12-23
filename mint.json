@@ -40,14 +40,19 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Getting Started",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "getting-started/Bot-sending-images",
+        "getting-started/User-sending-images",
+        "getting-started/Moderation"
+       
+      ]
+    },
+    {
+      "group": "Features and Functionality",
+      "pages": [
+        "features/Asynchronous-mode",
+        "features/SendMessage"
       ]
     },
     {
