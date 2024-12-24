@@ -1,6 +1,80 @@
 ---
 title: 'Bot Images'
-description: 'Text, title, and styling in standard markdown'
+description: ''
 icon: 'robot'
 ---
 
+This tutorial guides you through managing images for bots via API requests. You will learn how to upload images to a bot's content library and delete them when no longer needed.
+
+## **Prerequisites**
+Before proceeding, ensure the following:
+1. You know the `bot_id` of the bot you are managing.
+2. You have a valid `<SECRET_TOKEN>` for authentication.
+3. You have an image file ready to upload.
+
+
+## **Uploading Images to the Bot Library**
+
+![User Send Image](/images/bot_img.png)
+Images can be added to a bot's library by making a `POST` request to the `/content` endpoint.
+
+Here’s how to upload an image using the Talend API Tester:
+
+1. Open Talend API Tester and select the `POST` method.
+2. Enter the URL: 
+```
+http://chat-app.fanheat.com/v2/content?bot_id={{BOT_ID}}.
+```
+**Example**
+```
+https://chat-app.fanheat.com/v2/content?bot_id=3fc117da-e647-446c-bc95-e498b92be6af
+```
+
+<Note>Pass the following parameters: </Note>
+>  - **bot_id**: The unique identifier of the [bot](/quickstart).
+>  - **content**: The image file you want to upload.
+
+3. In the **Headers** section, add:
+   - `Authorization`: `Bearer <SECRET_TOKEN>`
+4. In the **Body** section, choose `multipart/form-data` as the content type.
+   - Add a field named `content` and upload your image file (e.g., `image.png`).
+5. Send the request and review the response.
+
+### **Response**
+On a successful request, the API will return a response indicating the image has been added to the bot's library. The response might include details like the `content_id` of the uploaded image.
+```json
+{
+    "id": "1cf027f9-5ec2-4d0f-8931-430cecb1bcb8.jpg",
+    "content_type": "image/jpeg",
+    "etag": "\"78de70ac613d9f763c62e31ecc5f11bd\"",
+    "filename": "447297286_1038079274404560_7786460498777728743_n.jpg",
+    "url": "https://s3.us-east-005.backblazeb2.com/clonetwin/thumbnail-1cf027f9-5ec2-4d0f-8931-430cecb1bcb8.jpg",
+    "fullres_url": "https://s3.us-east-005.backblazeb2.com/clonetwin/1cf027f9-5ec2-4d0f-8931-430cecb1bcb8.jpg"
+}
+
+```
+---
+
+## **Deleting Images from the Bot Library**
+![User Send Image](/images/bot_img_delete.png)
+
+When you need to remove an image from the bot's library, send a `DELETE` request to the appropriate API endpoint.
+
+1. Open Talend API Tester and select the `DELETE` method.
+2. Enter the URL: `http://chat-app.fanheat.com/v2/content/{{BOT_ID}}/{{CONTENT_ID}}`.
+
+<Note>Pass the following parameters: </Note>
+>   - `bot_id`: The unique identifier of the bot.
+>   - `content_id`: The unique identifier of the content (image) you want to delete.
+
+3. In the **Headers** section, add:
+   - `Authorization`: `Bearer <SECRET_TOKEN>`
+4. Send the request and review the response.
+
+### **Response**
+On a successful request, the API will return a confirmation that the image has been deleted.
+
+```json
+null
+
+```

@@ -20,7 +20,7 @@ The API request is designed to create a bot by providing necessary details such 
 1. **API Testing Tool**: Install or open your preferred API testing platform (e.g., Postman, Insomnia, or similar tools).
 2. **API Key**: Obtain your API key to authenticate the request. This is usually provided by the API provider.
 3. **Bot Details**: Prepare the necessary information for the bot, including:
-   - Name
+   - The name of the bot
    - Description (freeform personality description)
    - Key-value pairs for additional customization.
 
@@ -61,17 +61,25 @@ The API request is designed to create a bot by providing necessary details such 
    {
        "name": "BotName",                
        "freeform": "Bot description",    
-       "kv_pairs": {                     
-           "key1": "value1",
-           "key2": "value2"
-       }
+       "kv_pairs": {
+        "friendly": "true",
+        "tone": "professional",
+        "expertise": "API documentation, technical writing, and SEO",
+        "collaborative": "true",
+        "problem_solving": "excellent"
+    }
    }
    ```
 
    Replace:
    - **`BotName`**: The name of the bot.
    - **`Bot description`**: A description of the bot’s personality.
-   - **`key1` and `key2`**: Key-value pairs for additional metadata customization.
+   - **`KV Pairs`**: Refined to describe personality traits or attributes relevant to the bot:
+     - `friendly`: Whether the bot has a friendly demeanor.
+     - `tone`: The style or tone the bot uses in its interactions.
+     - `expertise`: Areas of knowledge or specialization.
+     - `collaborative`: Whether the bot values collaboration.
+     - `problem_solving`: An indicator of the bot's problem-solving skills.
 
   </Step>
   <Step title="Example Request">
