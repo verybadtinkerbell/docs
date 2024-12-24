@@ -1,0 +1,166 @@
+---
+title: 'Sending Message'
+description: 'This feature of the CloneTwin.ai API allows developers to interact with the platform by sending messages to a bot within a conversation. 
+'
+icon: 'message-arrow-up'
+---
+
+> This tutorial provides a step-by-step guide for using the Clonetwin.ai API to send messages, select languages, and work with message lists.
+
+
+## Getting Started
+
+### Prerequisites
+1. **Access to the API**: Ensure you have an API key or token to authenticate your requests.
+2. **Tools**: Use tools like Postman, cURL, or your preferred programming language with an HTTP client library to make API calls.
+
+---
+
+## Sending a Simple Message
+
+### Example Request
+
+To send a message, you need to make a `POST` request to the endpoint. 
+```http
+POST http://chat-app.fanheat.com/v2/complete
+```
+This is the endpoint for completing interactions, designed to handle conversational inputs and return responses.
+
+### Headers
+1. Content-Type
+
+- Value: application/json
+- Specifies that the request body is in JSON format.
+
+2. Authorization
+
+- Value: Bearer `{{TOKEN}}`
+- The `{{TOKEN}}` is a placeholder for your actual API key, which authenticates your request. Without this, the server will reject the request.
+
+### Request Body
+
+```http
+{
+  "conversation_id": "789",
+  "bot_id": "f5570f1e-bc06-4b87-bc1c-954deab618cf",
+  "message": "hello"
+}
+```
+The body of a Send Message request is where you define the conversation context, bot identity, and the message being sent. Below are the key fields:
+
+
+| **Field**           | **Type**  | **Required** | **Description**                                                                                                                                       | **Example**                              |
+|----------------------|-----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| `conversation_id`    | String    | Yes          | Unique identifier for the conversation. Links messages to a specific session.                                                                         | `"789"`                                  |
+| `bot_id`             | String    | Yes          | Unique identifier of the bot handling the message.                                                                                                    | `"c5e84988-0192-4135-ac3b-4348bed724cb"` |
+| `message`            | String    | Yes          | The text message sent to the bot for processing.                                                                                                      | `"hello"`                                |
+| `language` *(optional)* | String    | No           | Specifies the language for the bot's response. Defaults to English (`en`) if not provided. Supported values: `en`, `de`, `nl`, `es`, `ru`, `ar`.      | `"de"`                                   |
+
+
+### Response
+On success, the API will return a response containing the bot's reply to the message.
+```json
+{
+    "completion": [
+        "hallo!! erzähl mir, wie geht's dir heute?"
+    ],
+    "media": null,
+    "media_id": null,
+    "id": "076eb856-52c0-47ec-bff9-07addc39eefc"
+}
+
+```
+
+### How It Works
+1. Conversation Context:
+
+- The `conversation_id` ensures the bot maintains context across multiple messages within the same session. For example, follow-up questions or clarifications rely on this `ID`.
+
+2. Bot-Specific Logic:
+
+- The `bot_id` directs the request to a specific bot. Different bots may have unique personalities, languages, or capabilities.
+
+3. Message Content:
+
+- The `message` field contains the input from the user. This input is parsed by the bot to generate a response.
+---
+
+## Selecting a Language
+
+You can customize the bot's language for responses. The default language is English (`en`), but other options include **German**, **Dutch**, **Spanish**, **Russian**, and **Arabic**.
+
+### Example Request
+
+```http
+POST http://chat-app.fanheat.com/v2/complete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "conversation_id": "779",
+  "bot_id": "f5570f1e-bc06-4b87-bc1c-954deab618cf",
+  "message": "hello",
+  "language": "de"
+}
+```
+
+### Language Options
+- **`en`**: English (default)
+- **`de`**: German
+- **`nl`**: Dutch
+- **`es`**: Spanish
+- **`ru`**: Russian
+- **`ar`**: Arabic
+
+
+<Tip> Replace `"de"` with the desired language code like `"en"`. </Tip>
+
+
+### Response
+On success, the API will return a response containing the bot's reply to the message.
+
+```json
+{
+    "completion": [
+        "i'll talk in english",
+        "I'm really bad at this, but sundays are my fave day of the week I love sleeping in and then doing something crazy how about you??"
+    ],
+    "media": null,
+    "media_id": null,
+    "id": "b61c2c6b-3af1-4116-90c1-178e034e35f4"
+}
+
+```
+---
+
+## Using a List of Messages
+
+When sending multiple messages in a conversation, you can aggregate them into a single request for enhanced functionality like message delay and follow-up responses.
+
+### Example Request
+
+```http
+POST http://chat-app.fanheat.com/v2/complete HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "conversation_id": "789",
+  "bot_id": "c5e84988-0192-4135-ac3b-4348bed724cb",
+  "messages": [
+    { "bot": true, "content": "Heyy sexy, what are you up to tonight.. " },
+    { "bot": false, "content": "Not much, what about you" },
+    { "bot": true, "content": "Not much either, just chilling at home. Where are you from?" }
+  ],
+  "message": "New york",
+  "webhook": "https://webhook.site/9866117c-108f-4e10-89d7-0346c02ab665"
+}
+```
+
+### Parameters
+- **`messages`**: A list of previous messages in the conversation.
+  - Each message is a JSON object with:
+    - **`bot`**: `true` if sent by the bot, `false` if sent by the user.
+    - **`content`**: The text of the message.
+- **`message`**: The latest message in the conversation.
+- **`webhook`**: (Optional) A URL to send asynchronous responses to.
